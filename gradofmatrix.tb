@@ -1,0 +1,78 @@
+`timescale 1ns / 1ps
+
+module tb_gradient_matrix_vivado;
+
+    parameter M = 5;
+    parameter N = 5;
+
+    reg clk;
+    reg rst;
+    reg [7:0] pixel_in;
+    reg valid;
+
+    wire [15:0] Gx_out;
+    wire [15:0] Gy_out;
+    wire valid_out;
+
+    gradient_matrix_vivado #(M, N) uut (
+        .clk(clk),
+        .rst(rst),
+        .pixel_in(pixel_in),
+        .valid(valid),
+        .Gx_out(Gx_out),
+        .Gy_out(Gy_out),
+        .valid_out(valid_out)
+    );
+
+    always #5 clk = ~clk;  
+
+    initial begin
+        clk = 0;
+        rst = 1;
+        pixel_in = 0;
+        valid = 0;
+        #20;
+        
+        rst = 0;
+        
+        valid = 1;
+        
+        pixel_in = 8'd10;  
+        #10;             
+
+        pixel_in = 8'd20;  
+        #10;
+
+        pixel_in = 8'd30; 
+        #10;
+
+        pixel_in = 8'd40;  
+        #10;
+
+        pixel_in = 8'd50;
+        #10;
+
+        pixel_in = 8'd60; 
+        #10;
+
+        pixel_in = 8'd70;
+        #10;
+
+        pixel_in = 8'd80;
+        #10;
+
+        pixel_in = 8'd90;
+        #10;
+
+        pixel_in = 8'd100;
+        #10;
+
+        pixel_in = 8'd110;
+        #10;
+
+        $monitor("Time: %0t | Gx_out: %d | Gy_out: %d | Valid_out: %d", $time, Gx_out, Gy_out, valid_out);
+
+        #100;
+        $finish;
+    end
+endmodule
